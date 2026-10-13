@@ -48,3 +48,30 @@ No hay prórroga: suban avances parciales con commits pequeños durante la prueb
 | [`test-manager-library-3145556-page`](https://github.com/code-sena/test-manager-library-3145556-page) | Sitio público estático de presentación |
 | [`test-manager-library-3145556-infra`](https://github.com/code-sena/test-manager-library-3145556-infra) | Contenedores, red, volúmenes y motor de base de datos vacío |
 | [`test-manager-library-3145556-tool`](https://github.com/code-sena/test-manager-library-3145556-tool) | Utilidades: sembrador de datos de demostración |
+
+## Cómo correrlo (T-22)
+
+```bash
+cp .env.example .env     # VITE_API_URL=http://localhost:8000/api/v1
+npm install
+npm run dev              # http://localhost:5173 (el origen que la API permite por CORS)
+```
+
+React + Vite, sin librerías de UI. Solo habla con la API por el contrato (`src/api.js`); muestra el `message` en español
+del cuerpo de error único. El token vive en `sessionStorage` y se descarta ante un 401.
+
+| Pantalla | Rol | Historia |
+|---|---|---|
+| Ingresar | todos | HU-01 |
+| Catálogo (buscar, crear, cambiar total, dar de baja) | buscar: ambos · cambios: admin | HU-03, HU-04 |
+| Socios (buscar, crear) | admin, bibliotecario | HU-05 |
+| Prestar (socio + 1 a 3 libros) | admin, bibliotecario | HU-06 |
+| Préstamos y devoluciones (filtrar, devolver por línea) | admin, bibliotecario | HU-07, HU-08 |
+| Vencidos | admin, bibliotecario | HU-09 |
+| Más prestados | admin | HU-10 |
+| Bibliotecarios (crear) | admin | HU-02 |
+
+### Evidencia
+
+Recorrido manual contra la API de `infra` (`docker compose up`): ingresar como admin → crear libro → crear socio →
+prestar → devolver → reporte del mes con el libro prestado una vez.
